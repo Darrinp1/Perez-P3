@@ -2,6 +2,7 @@
 //
 */
 
+
 /* NOTE: MOVIES.JSON CONTAINS A LIST OF MOVIES AND ACCOMPANYING METADATA
 //
 //    They are in the following format:
@@ -21,27 +22,105 @@
 */
 
 
-const vue_app = Vue.createApp({
-      // This automatically imports your movies.json file and puts it into
-      //   the variable: movies
-      created () {
-            fetch('movies.json').then(response => response.json()).then(json => {
-                  this.movies = json
-            })
-      },
-      data() {
-        return {
-            title: "IMDB + Darrin's Top 8 Movies",
-            owner: "Darrin",
-            github: "https://github.com/Darrinp1/Perez-P3",
-            movies: []
-            
-         
-      };
-    },
-      methods: {
-            /* ADD FUNCTIONS/METHODS FOR STEP 7 HERE */
-      }
-})
 
-vue_app.mount("#vue_app")
+
+const vue_app = Vue.createApp({
+      data() {
+          return {
+              title: "IMDB + Darrin's Top 8 Movies",
+              owner: "Darrin",
+              github: "https://github.com/Darrinp1/Perez-P3",
+              movies: []
+          };
+      },
+      timeText(minutes) {
+          let hours = Math.trunc(minutes / 60);
+          let mins = minutes % 60;
+          return `${hours}h ${mins}m`;
+      },
+      methods: {
+         
+         
+          like(index) {
+              this.movies[index].likes++;
+          },
+         
+          dislike(index) {
+              this.movies[index].dislikes++;
+          },
+         
+          posterClick(index) {
+              const movie = this.movies[index];
+              movie.posterindex = (movie.posterindex + 1) % movie.posters.length;
+          },
+         
+          getMonthText(dateArray) {
+              const [year, month, day] = dateArray;
+ 
+ 
+              let monthText;
+              switch (month) {
+                  case 1:
+                      monthText = "January";
+                      break;
+                  case 2:
+                      monthText = "February";
+                      break;
+                  case 3:
+                      monthText = "March";
+                      break;
+                  case 4:
+                      monthText = "April";
+                      break;
+                  case 5:
+                      monthText = "May";
+                      break;
+                  case 6:
+                      monthText = "June";
+                      break;
+                  case 7:
+                      monthText = "July";
+                      break;
+                  case 8:
+                      monthText = "August";
+                      break;
+                  case 9:
+                      monthText = "September";
+                      break;
+                  case 10:
+                      monthText = "October";
+                      break;
+                  case 11:
+                      monthText = "November";
+                      break;
+                  case 12:
+                      monthText = "December";
+                      break;
+                  default:
+                      monthText = "Invalid Month";
+              }
+ 
+ 
+             
+              return `${monthText} ${day}, ${year}`;
+          }
+         
+      },
+     
+      created() {
+          fetch('movies.json')
+              .then(response => response.json())
+              .then(json => {
+                  this.movies = json;
+              })
+              .catch(error => {
+                  console.error("Error loading movies.json:", error);
+              });
+      }
+     
+  });
+ 
+ 
+  vue_app.mount("#vue_app");
+ 
+ 
